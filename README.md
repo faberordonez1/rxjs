@@ -4,6 +4,7 @@ Cada operador se explica en una Rama diferente
 [Link video YT ▶️](https://www.youtube.com/watch?v=Vc87KRqvMJM)
 
 ## switchMap
+Para definir mejor la explicación tambien se usan los operadores fromEvent e interval
 
  fromEvent => Obs detecta click en el DOM  
  SwitchMap => Interrumpe y reinicia el flujo del obs (interval) con cada click  
