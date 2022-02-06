@@ -1,3 +1,19 @@
+# Ejemplo Simple switchMap
+
+~~~
+  public ngOnInit():void {
+    /**
+     * fromEvent => Obs detecta click en el DOM
+     * SwitchMap => Interrumpe el flujo del obs (interval) con cada click
+     * interval(1000) => contador que incrementa en 1 cada segundo 
+     */
+
+    fromEvent(document, 'click')
+      .pipe(switchMap(() => interval(1000)))
+      .subscribe(console.log);
+  }
+~~~
+
 # Rxjs
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.0.3.
