@@ -1,56 +1,48 @@
 # Ejemplos de RXJS  
 Cada operador se explica en una Rama diferente
 
-[Link video YT ▶️](https://www.youtube.com/watch?v=Vc87KRqvMJM)
+[Link video YT ▶️](https://www.youtube.com/watch?v=U-afOIMLHKQ)
 
-## switchMap
+## Ciclo Observable (next,complete,error)
 
-SwitchMap basicamente interrumpe la ejecución del flujo Observable en cuanto recibe un valor nuevo del Observable  
+ El observable esta compuesto por 2 partes, primero el ciclo creado (matriz) y luego viene el ciclo de la suscripcion (recorre esa matriz)  
 
+ El flujo se puede ver consola...
 
-Para definir mejor la explicación tambien se usan los operadores fromEvent e interval
-
- fromEvent => Obs detecta click en el DOM  
- SwitchMap => Interrumpe y reinicia el flujo del obs (interval) con cada click  
- interval(1000) => contador que incrementa en 1 cada segundo 
+    next => Procesa todos los datos  
+    error => Salta cuando se cumple condicion de error y ahi termina el ciclo  
+    complete => Indica que todos los next se ejecutaron correctamente
 
 ~~~
-  public ngOnInit():void {
-    fromEvent(document, 'click')
-      .pipe(switchMap(() => interval(1000)))
-      .subscribe(console.log);
+  public ngOnInit(): void {
+
+    //1. Ciclo
+    const myObservable = new Observable((observer) => {
+      observer.next(1);
+      observer.next(2);
+      observer.next('Hola Mundo');
+      //observer.error('Error N 1'); /*debe ir dentro de condicional de error*/
+      observer.complete();
+    });
+
+    //2. recorrrido del ciclo
+     const subs = myObservable.subscribe({
+      next: (x) => console.log('El siguiente valor es ' + x),
+      error: (err) => console.log('Error: ' + err),
+      complete: () => console.log('Suscripcion completada'),
+    });
+
+    subs.unsubscribe();
   }
 ~~~
 
 # Flujo
 
-## Click en el DOM
   Inicia el flujo en consola
 
 ~~~
-0
-1
-2
-3
-n
-~~~
-
-## Click de nuevo
- Reinicia todo el flujo
-~~~
-0
-1
-2
-n
-~~~
-
-## Click de nuevo
- Reinicia todo el flujo
-~~~
-0
-1
-2
-3
-4
-n 
+El siguiente valor es 1
+El siguiente valor es 2
+El siguiente valor es Hola Mundo
+Suscripción completada
 ~~~

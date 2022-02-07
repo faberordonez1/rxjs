@@ -1,26 +1,40 @@
 import { Component, OnInit } from '@angular/core';
-import { switchMap, interval, fromEvent } from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
 })
-export class AppComponent implements OnInit{
+export class AppComponent implements OnInit {
   title = 'rxjs';
 
   constructor() {}
 
-  public ngOnInit():void {
+  public ngOnInit(): void {
     /**
-     * fromEvent => Obs detecta click en el DOM
-     * SwitchMap => Interrumpe el flujo del obs (interval) con cada click
-     * interval(1000) => contador que incrementa en 1 cada segundo 
+     * El observable esta compuesto por 2 partes, primero el ciclo creado (matriz) y luego viene el ciclo de la suscripcion (recorre esa matriz)  
+     * 
+     * next => Procesa todos los datos
+     * error => Salta cuando se cumple condicion de error y ahi termina el ciclo
+     * complete => Indica que todos los next se ejecutaron correctamente
      */
 
-    fromEvent(document, 'click')
-      .pipe(switchMap(() => interval(1000)))
-      .subscribe(console.log);
-  }
+      //ciclo
+    const myObservable = new Observable((observer) => {
+      observer.next(1);
+      observer.next(2);
+      observer.next('Hola Mundo');
+     //observer.error('Error N 1'); /*debe ir dentro de condicional de error*/
+      observer.complete();
+    });
+      //recorrrido del ciclo (suscripcion)
+    const subs = myObservable.subscribe({
+      next: (x) => console.log('El siguiente valor es ' + x),
+      error: (err) => console.log('Error: ' + err),
+      complete: () => console.log('Suscripcion completada'),
+    });
 
+    subs.unsubscribe();
+  }
 }
